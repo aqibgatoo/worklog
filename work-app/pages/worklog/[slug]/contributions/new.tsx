@@ -162,7 +162,7 @@ export const AddContribution = ({}) => {
               name="type"
               rules={{ required: true }}
               render={({ field: { onChange, onBlur, value, ref } }) => (
-                <Select<ContributionType>
+                <Select
                   handleChange={onChange}
                   value={value}
                   label="Contribution Type"
@@ -177,7 +177,7 @@ export const AddContribution = ({}) => {
               name="technology"
               rules={{ required: true }}
               render={({ field: { onChange, onBlur, value, ref } }) => (
-                <Select<Technology>
+                <Select
                   handleChange={onChange}
                   value={value}
                   label="Technology"

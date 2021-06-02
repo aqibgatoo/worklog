@@ -1,15 +1,17 @@
-import { ChangeEvent, FormEvent } from "react";
+import { FormEvent } from "react";
 
-type Enum<E> = Record<keyof E, string>;
+type Enum = {
+  [key: string]: string;
+};
 
-export type InputProps<T> = {
+export type InputProps = {
   label: string;
   value?: any;
-  options: Enum<T>;
+  options: Enum;
   handleChange: (event: FormEvent<HTMLSelectElement>) => void;
 };
 
-const Input = <T,>({ value, label, handleChange, options }: InputProps<T>) => {
+const Input = ({ value, label, handleChange, options }: InputProps) => {
   return (
     <div
       display="flex"

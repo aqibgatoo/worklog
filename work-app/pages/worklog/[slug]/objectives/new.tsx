@@ -215,7 +215,7 @@ export const AddObjective = ({}) => {
             <div flex="1">
               <Controller
                 control={control}
-                name={`links.${index}.uri`}
+                name={`links.${index}.uri` as const}
                 render={({ field: { onChange, onBlur, value, ref } }) => (
                   <Input
                     value={value}
@@ -230,7 +230,7 @@ export const AddObjective = ({}) => {
             <div flex="1" ml="2">
               <Controller
                 control={control}
-                name={`links.${index}.title`}
+                name={`links.${index}.title` as const}
                 render={({ field: { onChange, onBlur, value, ref } }) => (
                   <Input
                     value={value}
@@ -279,7 +279,7 @@ export const AddObjective = ({}) => {
             <div flex="1">
               <Controller
                 control={control}
-                name={`links.${index}.name`}
+                name={`stakeholders.${index}.name` as const}
                 render={({ field: { onChange, onBlur, value, ref } }) => (
                   <Input
                     value={value}
