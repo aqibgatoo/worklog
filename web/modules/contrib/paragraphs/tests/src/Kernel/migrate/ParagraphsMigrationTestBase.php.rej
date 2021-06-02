@@ -1,0 +1,98 @@
+***************
+*** 2,11 ****
+  
+  namespace Drupal\Tests\paragraphs\Kernel\migrate;
+  
+  use Drupal\field\Entity\FieldConfig;
+  use Drupal\field\Entity\FieldStorageConfig;
+  use Drupal\migrate\Plugin\MigrationInterface;
+  use Drupal\paragraphs\Entity\ParagraphsType;
+  use Drupal\Tests\migrate_drupal\Kernel\MigrateDrupalTestBase;
+  
+  /**
+--- 2,13 ----
+  
+  namespace Drupal\Tests\paragraphs\Kernel\migrate;
+  
++ use Drupal\Core\Site\Settings;
+  use Drupal\field\Entity\FieldConfig;
+  use Drupal\field\Entity\FieldStorageConfig;
+  use Drupal\migrate\Plugin\MigrationInterface;
+  use Drupal\paragraphs\Entity\ParagraphsType;
++ use Drupal\paragraphs\ParagraphsMigration;
+  use Drupal\Tests\migrate_drupal\Kernel\MigrateDrupalTestBase;
+  
+  /**
+***************
+*** 13,18 ****
+   */
+  abstract class ParagraphsMigrationTestBase extends MigrateDrupalTestBase {
+  
+    /**
+     * {@inheritdoc}
+     */
+--- 15,30 ----
+   */
+  abstract class ParagraphsMigrationTestBase extends MigrateDrupalTestBase {
+  
++   /**
++    * {@inheritdoc}
++    */
++   public static $modules = [
++     'entity_reference_revisions',
++     'migrate',
++     'migrate_drupal',
++     'paragraphs',
++   ];
++ 
+    /**
+     * {@inheritdoc}
+     */
+***************
+*** 119,126 ****
+     * {@inheritdoc}
+     */
+    protected function prepareMigration(MigrationInterface $migration) {
+- 
+-     // We want to run the revision migraiton without running all the node
+      // migrations.
+      if ($migration->id() == 'd7_node_revision:paragraphs_test') {
+        $migration->set('migration_dependencies', [
+--- 131,137 ----
+     * {@inheritdoc}
+     */
+    protected function prepareMigration(MigrationInterface $migration) {
++     // We want to run the revision migration without running all the node
+      // migrations.
+      if ($migration->id() == 'd7_node_revision:paragraphs_test') {
+        $migration->set('migration_dependencies', [
+***************
+*** 128,134 ****
+          'optional' => [],
+        ]);
+        $migration->set('requirements', ['d7_node:paragraphs_test' => 'd7_node:paragraphs_test']);
+  
+      }
+    }
+  
+--- 139,158 ----
+          'optional' => [],
+        ]);
+        $migration->set('requirements', ['d7_node:paragraphs_test' => 'd7_node:paragraphs_test']);
++     }
++   }
++ 
++   /**
++    * Sets the type of the paragraphs migration derivation.
++    *
++    * @param bool $derive_by_parent
++    *   Whether paragraphs migrations should be derived by parent entity.
++    */
++   protected function setParagraphsMigrationDerivedByParent(bool $derive_by_parent) {
++     $current_method = Settings::get(ParagraphsMigration::DERIVATION_METHOD_KEY, FALSE);
+  
++     if ($current_method !== $derive_by_parent) {
++       $this->setSetting(ParagraphsMigration::DERIVATION_METHOD_KEY, $derive_by_parent);
+      }
+    }
+  

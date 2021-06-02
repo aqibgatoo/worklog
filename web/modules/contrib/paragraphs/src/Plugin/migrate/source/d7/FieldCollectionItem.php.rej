@@ -1,0 +1,159 @@
+***************
+*** 24,35 ****
+     */
+    const JOIN = 'f.revision_id = fr.revision_id';
+  
+    /**
+     * {@inheritdoc}
+     */
+    public function defaultConfiguration() {
+      return [
+        'field_name' => '',
+      ] + parent::defaultConfiguration();
+    }
+  
+--- 24,44 ----
+     */
+    const JOIN = 'f.revision_id = fr.revision_id';
+  
++   /**
++    * The prefix of the field table that contains the entity properties.
++    *
++    * @var string
++    */
++   const PARENT_FIELD_TABLE_PREFIX = 'field_data_';
++ 
+    /**
+     * {@inheritdoc}
+     */
+    public function defaultConfiguration() {
+      return [
+        'field_name' => '',
++       'parent_type' => NULL,
++       'parent_bundle' => NULL,
+      ] + parent::defaultConfiguration();
+    }
+  
+***************
+*** 37,56 ****
+     * {@inheritdoc}
+     */
+    public function query() {
+-     $query = $this->select('field_collection_item', 'f')
+-       ->fields('f', [
+-         'item_id',
+-         'field_name',
+-         'archived',
+-       ])
+-       ->fields('fr', ['revision_id']);
+      $query->innerJoin('field_collection_item_revision', 'fr', static::JOIN);
+  
+-     // This configuration item may be set by a deriver to restrict the
+-     // bundles retrieved.
+-     if ($this->configuration['field_name']) {
+-       $query->condition('f.field_name', $this->configuration['field_name']);
+-     }
+      return $query;
+    }
+  
+--- 46,99 ----
+     * {@inheritdoc}
+     */
+    public function query() {
++     [
++       'field_name' => $field_name,
++       'parent_type' => $parent_type,
++       'parent_bundle' => $parent_bundle,
++     ] = $this->configuration;
++ 
++     // Derived by parent entity type.
++     if ($field_name && $parent_type) {
++       $field_table = static::PARENT_FIELD_TABLE_PREFIX . $field_name;
++       $query = $this->select($field_table, 'fd')
++         ->fields('f', [
++           'item_id',
++           'field_name',
++           'archived',
++         ])
++         ->fields('fr', ['revision_id'])
++         ->condition('fd.entity_type', $parent_type);
++       if ($parent_bundle) {
++         $query->condition('fd.bundle', $parent_bundle);
++       }
++       $query->addField('fd', 'entity_type', 'parent_type');
++       $query->addField('fd', 'entity_id', 'parent_id');
++ 
++       $query->join('field_collection_item', 'f', "f.field_name = :field_name AND f.item_id = fd.{$field_name}_value AND f.revision_id = fd.{$field_name}_revision_id", [
++         ':field_name' => $field_name,
++       ]);
++     }
++     else {
++       $query = $this->select('field_collection_item', 'f')
++         ->fields('f', [
++           'item_id',
++           'field_name',
++           'archived',
++         ])
++         ->fields('fr', ['revision_id']);
++ 
++       // This configuration item may be set by a deriver to restrict the
++       // bundles retrieved.
++       if ($field_name) {
++         $query->condition('f.field_name', $field_name);
++         $query->addField('fc', 'entity_type', 'parent_type');
++         $query->addField('fc', 'entity_id', 'parent_id');
++         $query->innerJoin('field_revision_' . $field_name, 'fc', 'fc.' . $field_name . '_value = f.item_id and fc.' . $field_name . '_revision_id = f.revision_id');
++       }
++     }
++ 
+      $query->innerJoin('field_collection_item_revision', 'fr', static::JOIN);
+  
+      return $query;
+    }
+  
+***************
+*** 85,90 ****
+        'revision_id' => $this->t('The field_collection_item revision id'),
+        'bundle' => $this->t('The field_collection bundle'),
+        'field_name' => $this->t('The field_collection field_name'),
+      ];
+  
+      return $fields;
+--- 128,135 ----
+        'revision_id' => $this->t('The field_collection_item revision id'),
+        'bundle' => $this->t('The field_collection bundle'),
+        'field_name' => $this->t('The field_collection field_name'),
++       'parent_type' => $this->t('The type of the parent entity'),
++       'parent_id' => $this->t('The identifier of the parent entity'),
+      ];
+  
+      return $fields;
+***************
+*** 94,107 ****
+     * {@inheritdoc}
+     */
+    public function getIds() {
+-     $ids = [
+        'item_id' => [
+          'type' => 'integer',
+          'alias' => 'f',
+        ],
+      ];
+- 
+-     return $ids;
+    }
+  
+  }
+--- 139,150 ----
+     * {@inheritdoc}
+     */
+    public function getIds() {
++     return [
+        'item_id' => [
+          'type' => 'integer',
+          'alias' => 'f',
+        ],
+      ];
+    }
+  
+  }

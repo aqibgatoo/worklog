@@ -1,0 +1,139 @@
+***************
+*** 28,50 ****
+          [
+            'field_name' => 'field_text',
+            'entity_type' => 'paragraphs_item',
+-           'bundle' => 'paragraphs_field',
+            'data' => 'Serialized Instance Data',
+            'deleted' => '0',
+            'field_id' => '1',
+          ],
+        ],
+        'field_config' => [
+          [
+            'id' => '1',
+            'field_name' => 'field_text',
+            'translatable' => '1',
+          ],
+        ],
+        'field_revision_field_text' => [
+          [
+            'entity_type' => 'paragraphs_item',
+-           'bundle' => 'paragraphs_field',
+            'deleted' => '0',
+            'entity_id' => '1',
+            'revision_id' => '1',
+--- 26,73 ----
+          [
+            'field_name' => 'field_text',
+            'entity_type' => 'paragraphs_item',
++           'bundle' => 'paragraphs_bundle',
+            'data' => 'Serialized Instance Data',
+            'deleted' => '0',
+            'field_id' => '1',
+          ],
++         [
++           'field_name' => 'field_paragraphs_field',
++           'entity_type' => 'node',
++           'bundle' => 'landing',
++           'data' => 'Serialized Instance Data',
++           'deleted' => '0',
++           'field_id' => '2',
++         ],
++         [
++           'field_name' => 'field_paragraphs_field',
++           'entity_type' => 'taxonomy_term',
++           'bundle' => 'category_landing',
++           'data' => 'Serialized Instance Data',
++           'deleted' => '0',
++           'field_id' => '2',
++         ],
+        ],
+        'field_config' => [
+          [
+            'id' => '1',
+            'field_name' => 'field_text',
+            'translatable' => '1',
++           'type' => 'text',
++           'module' => 'text',
++         ],
++         [
++           'id' => '2',
++           'field_name' => 'field_paragraphs_field',
++           'translatable' => '0',
++           'type' => 'paragraphs',
++           'module' => 'paragraphs',
+          ],
+        ],
+        'field_revision_field_text' => [
+          [
+            'entity_type' => 'paragraphs_item',
++           'bundle' => 'paragraphs_bundle',
+            'deleted' => '0',
+            'entity_id' => '1',
+            'revision_id' => '1',
+***************
+*** 54,60 ****
+          ],
+          [
+            'entity_type' => 'paragraphs_item',
+-           'bundle' => 'paragraphs_field',
+            'deleted' => '0',
+            'entity_id' => '2',
+            'revision_id' => '2',
+--- 77,83 ----
+          ],
+          [
+            'entity_type' => 'paragraphs_item',
++           'bundle' => 'paragraphs_bundle',
+            'deleted' => '0',
+            'entity_id' => '2',
+            'revision_id' => '2',
+***************
+*** 64,70 ****
+          ],
+          [
+            'entity_type' => 'paragraphs_item',
+-           'bundle' => 'paragraphs_field',
+            'deleted' => '0',
+            'entity_id' => '2',
+            'revision_id' => '3',
+--- 87,93 ----
+          ],
+          [
+            'entity_type' => 'paragraphs_item',
++           'bundle' => 'paragraphs_bundle',
+            'deleted' => '0',
+            'entity_id' => '2',
+            'revision_id' => '3',
+***************
+*** 78,91 ****
+            'item_id' => '1',
+            'revision_id' => '1',
+            'field_name' => 'field_paragraphs_field',
+-           'bundle' => 'paragraphs_field',
+            'archived' => '0',
+          ],
+          [
+            'item_id' => '2',
+            'revision_id' => '3',
+            'field_name' => 'field_paragraphs_field',
+-           'bundle' => 'paragraphs_field',
+            'archived' => 0,
+          ],
+        ],
+--- 101,114 ----
+            'item_id' => '1',
+            'revision_id' => '1',
+            'field_name' => 'field_paragraphs_field',
++           'bundle' => 'paragraphs_bundle',
+            'archived' => '0',
+          ],
+          [
+            'item_id' => '2',
+            'revision_id' => '3',
+            'field_name' => 'field_paragraphs_field',
++           'bundle' => 'paragraphs_bundle',
+            'archived' => 0,
+          ],
+        ],

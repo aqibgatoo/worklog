@@ -1,0 +1,54 @@
+***************
+*** 12,17 ****
+   * @group paragraphs
+   */
+  class ParagraphsTypeSourceTest extends MigrateSqlSourceTestBase {
+    use ParagraphsSourceData;
+  
+    /**
+--- 12,18 ----
+   * @group paragraphs
+   */
+  class ParagraphsTypeSourceTest extends MigrateSqlSourceTestBase {
++ 
+    use ParagraphsSourceData;
+  
+    /**
+***************
+*** 23,38 ****
+     * {@inheritdoc}
+     */
+    public function providerSource() {
+-     $data = $this->getSourceData();
+-     $data[0]['expected_results'] = [
+        [
+-         'bundle' => 'paragraphs_field',
+-         'name' => 'Paragraphs Field',
+-         'locked' => '1',
+-         'description' => '',
+        ],
+      ];
+-     return $data;
+    }
+  
+  }
+--- 24,42 ----
+     * {@inheritdoc}
+     */
+    public function providerSource() {
++     return [
+        [
++         'source_data' => $this->getSourceData(),
++         'expected_results' => [
++           [
++             'bundle' => 'paragraphs_bundle',
++             'name' => 'Paragraphs Bundle',
++             'locked' => '1',
++             'description' => '',
++           ],
++         ],
+        ],
+      ];
+    }
+  
+  }

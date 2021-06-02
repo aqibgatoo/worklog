@@ -1,0 +1,57 @@
+<?php
+
+namespace Drupal\paragraphs;
+
+use Drupal\Core\Site\Settings;
+
+/**
+ * Class ParagraphsMigration.
+ */
+final class ParagraphsMigration {
+
+  /**
+   * The key of the paragraphs migration derivation method in settings.php.
+   *
+   * @var string
+   */
+  const DERIVATION_METHOD_KEY = 'paragraphs_migration_derivation_method';
+
+  /**
+   * Derive paragraph entity migrations based on paragraph types.
+   *
+   * @var string
+   */
+  const DERIVATION_METHOD_LEGACY = 'paragraph_type';
+
+  /**
+   * Derive paragraph entity migrations based on parent entity type.
+   *
+   * @var string
+   */
+  const DERIVATION_METHOD_PARENT = 'paragraph_parent_type';
+
+  /**
+   * Default derivation strategy (BC).
+   *
+   * @var string
+   */
+  const DERIVATION_METHOD_DEFAULT = self::DERIVATION_METHOD_LEGACY;
+
+  /**
+   * Returns the derivation method of paragraph entity migrations.
+   *
+   * @return string
+   */
+  public static function getParagraphsMigrationDerivationMethod() {
+    $method = Settings::get(self::DERIVATION_METHOD_KEY, self::DERIVATION_METHOD_DEFAULT);
+    $handled_methods = [
+      self::DERIVATION_METHOD_LEGACY,
+      self::DERIVATION_METHOD_PARENT,
+    ];
+
+    return in_array($method, $handled_methods, TRUE) ?
+      $method :
+      self::DERIVATION_METHOD_DEFAULT;
+  }
+
+}

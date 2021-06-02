@@ -1,0 +1,62 @@
+***************
+*** 20,34 ****
+  
+    /**
+     * Join string for getting current revisions.
+     */
+    const JOIN = "p.revision_id = pr.revision_id";
+  
+    /**
+     * {@inheritdoc}
+     */
+    public function defaultConfiguration() {
+      return [
+        'bundle' => '',
+      ] + parent::defaultConfiguration();
+    }
+  
+--- 21,47 ----
+  
+    /**
+     * Join string for getting current revisions.
++    *
++    * @var string
+     */
+    const JOIN = "p.revision_id = pr.revision_id";
+  
++   /**
++    * The prefix of the field table that contains the entity properties.
++    *
++    * @var string
++    */
++   const PARENT_FIELD_TABLE_PREFIX = 'field_data_';
++ 
+    /**
+     * {@inheritdoc}
+     */
+    public function defaultConfiguration() {
+      return [
+        'bundle' => '',
++       'parent_type' => NULL,
++       'parent_bundle' => NULL,
++       'field_name' => NULL,
+      ] + parent::defaultConfiguration();
+    }
+  
+***************
+*** 82,87 ****
+        'revision_id' => $this->t('The paragraph_item revision id'),
+        'bundle' => $this->t('The paragraph bundle'),
+        'field_name' => $this->t('The paragraph field_name'),
+      ];
+  
+      return $fields;
+--- 167,174 ----
+        'revision_id' => $this->t('The paragraph_item revision id'),
+        'bundle' => $this->t('The paragraph bundle'),
+        'field_name' => $this->t('The paragraph field_name'),
++       'parent_type' => $this->t('Parent entity type ID'),
++       'parent_id' => $this->t('Parent entity ID'),
+      ];
+  
+      return $fields;

@@ -1,0 +1,27 @@
+***************
+*** 4,16 ****
+  
+  use Drupal\migrate\Plugin\MigrationInterface;
+  use Drupal\migrate_drupal\Plugin\migrate\field\FieldPluginBase;
+  
+  /**
+   * Field Plugin for field collection migrations.
+   *
+-  * @todo Implement ::defineValueProcessPipeline()
+-  * @see https://www.drupal.org/project/paragraphs/issues/2911244
+-  *
+   * @MigrateField(
+   *   id = "field_collection",
+   *   core = {7},
+--- 4,14 ----
+  
+  use Drupal\migrate\Plugin\MigrationInterface;
+  use Drupal\migrate_drupal\Plugin\migrate\field\FieldPluginBase;
++ use Drupal\paragraphs\ParagraphsMigration;
+  
+  /**
+   * Field Plugin for field collection migrations.
+   *
+   * @MigrateField(
+   *   id = "field_collection",
+   *   core = {7},
