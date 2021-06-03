@@ -49,18 +49,15 @@ export const AddWorkLog = ({}) => {
       },
     };
     try {
-      const response = await fetch(
-        "http://worklog.ddev.site/jsonapi/node/work_log",
-        {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
-            "Content-Type": "application/vnd.api+json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const response = await fetch(process.env.NEXT_JSON_API_URL, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
+          "Content-Type": "application/vnd.api+json",
+        },
+        body: JSON.stringify(payload),
+      });
       setLoading(false);
       if (response.status === 201) {
         router.push("/");

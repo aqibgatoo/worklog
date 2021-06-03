@@ -52,7 +52,7 @@ export const AddCertification = ({ slug, id }: CertificationProps) => {
     };
     try {
       const response = await fetch(
-        "http://worklog.ddev.site/jsonapi/paragraph/certificate",
+        `${process.env.NEXT_JSON_API_URL}/paragraph/certificate`,
         {
           method: "POST",
           headers: {
@@ -77,7 +77,7 @@ export const AddCertification = ({ slug, id }: CertificationProps) => {
         ],
       };
       const res = await fetch(
-        `http://worklog.ddev.site/jsonapi/node/work_log/${id}/relationships/field_certifications`,
+        `${process.env.NEXT_JSON_API_URL}/node/work_log/${id}/relationships/field_certifications`,
         {
           method: "POST",
           headers: {

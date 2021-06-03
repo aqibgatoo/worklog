@@ -94,7 +94,7 @@ export const AddContribution = ({}) => {
 
     try {
       const response = await fetch(
-        "http://worklog.ddev.site/jsonapi/paragraph/contribution",
+        `${process.env.NEXT_JSON_API_URL}/paragraph/contribution`,
         {
           method: "POST",
           headers: {
@@ -120,7 +120,7 @@ export const AddContribution = ({}) => {
         ],
       };
       const res = await fetch(
-        `http://worklog.ddev.site/jsonapi/node/work_log/${id}/relationships/field_contributions`,
+        `${process.env.NEXT_JSON_API_URL}/node/work_log/${id}/relationships/field_contributions`,
         {
           method: "POST",
           headers: {

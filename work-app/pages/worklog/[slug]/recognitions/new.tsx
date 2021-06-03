@@ -71,7 +71,7 @@ export const AddRecognition = ({ slug, id, onSuccess }: RecognitionProps) => {
 
     try {
       const response = await fetch(
-        "http://worklog.ddev.site/jsonapi/paragraph/recognition",
+        `${process.env.NEXT_JSON_API_URL}/paragraph/recognition`,
         {
           method: "POST",
           headers: {
@@ -97,7 +97,7 @@ export const AddRecognition = ({ slug, id, onSuccess }: RecognitionProps) => {
         ],
       };
       const res = await fetch(
-        `http://worklog.ddev.site/jsonapi/node/work_log/${id}/relationships/field_recognitions`,
+        `${process.env.NEXT_JSON_API_URL}/node/work_log/${id}/relationships/field_recognitions`,
         {
           method: "POST",
           headers: {

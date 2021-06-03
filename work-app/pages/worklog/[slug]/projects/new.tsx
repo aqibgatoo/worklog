@@ -50,7 +50,7 @@ export const AddProject = ({}) => {
 
     try {
       const response = await fetch(
-        "http://worklog.ddev.site/jsonapi/paragraph/project",
+        `${process.env.NEXT_JSON_API_URL}/paragraph/project`,
         {
           method: "POST",
           headers: {
@@ -76,7 +76,7 @@ export const AddProject = ({}) => {
         ],
       };
       const res = await fetch(
-        `http://worklog.ddev.site/jsonapi/node/work_log/${id}/relationships/field_projects`,
+        `${process.env.NEXT_JSON_API_URL}/node/work_log/${id}/relationships/field_projects`,
         {
           method: "POST",
           headers: {

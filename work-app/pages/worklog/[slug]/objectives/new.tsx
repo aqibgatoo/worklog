@@ -92,7 +92,7 @@ export const AddObjective = ({}) => {
 
     try {
       const response = await fetch(
-        "http://worklog.ddev.site/jsonapi/paragraph/objective",
+        `${process.env.NEXT_JSON_API_URL}/paragraph/objective`,
         {
           method: "POST",
           headers: {
@@ -118,7 +118,7 @@ export const AddObjective = ({}) => {
         ],
       };
       const res = await fetch(
-        `http://worklog.ddev.site/jsonapi/node/work_log/${id}/relationships/field_objectives`,
+        `${process.env.NEXT_JSON_API_URL}/node/work_log/${id}/relationships/field_objectives`,
         {
           method: "POST",
           headers: {
