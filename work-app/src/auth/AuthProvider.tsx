@@ -58,6 +58,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = () => {
     gapi.auth2.getAuthInstance().signOut();
+    setUser(null);
   };
 
   const value = {
