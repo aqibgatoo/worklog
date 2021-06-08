@@ -2,6 +2,7 @@ import { link } from "fs";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { addChildEntity, ChildEntity } from "../../../../src/api/client";
 import { Input, Button } from "../../../../src/components";
 import { Layout } from "../../../../src/layout";
 import { Source } from "../../../../src/types";
@@ -16,11 +17,7 @@ export type CertificationProps = {
   id: string;
 };
 export const AddCertification = ({ slug, id }: CertificationProps) => {
-  const {
-    push,
-  } = useRouter();
-  console.log(id, slug);
-
+  const { push } = useRouter();
   const {
     handleSubmit,
     control,
@@ -39,59 +36,14 @@ export const AddCertification = ({ slug, id }: CertificationProps) => {
   // });
   const submit = async (certification: Certification) => {
     setLoading(true);
-    console.log(certification);
-    const payload = {
-      data: {
-        type: "paragraph--certificate",
-        attributes: {
-          field_certification_title: certification.title,
-          field_completion_date: certification.completionDate,
-          field_link: certification.link,
-        },
-      },
-    };
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_JSON_API_URL}/paragraph/certificate`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
-            "Content-Type": "application/vnd.api+json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
-      const paragraph = await response.json();
-
-      const newPayload = {
-        data: [
-          {
-            type: "paragraph--certificate",
-            id: paragraph.data.id,
-            meta: {
-              target_revision_id:
-                paragraph.data.attributes.drupal_internal__revision_id,
-            },
-          },
-        ],
-      };
-      const res = await fetch(
-        `${process.env.NEXT_JSON_API_URL}/node/work_log/${id}/relationships/field_certifications`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
-            "Content-Type": "application/vnd.api+json",
-          },
-          body: JSON.stringify(newPayload),
-        }
-      );
-      setLoading(false);
+    const result = await addChildEntity(id, ChildEntity.Certificate, {
+      field_certification_title: certification.title,
+      field_completion_date: certification.completionDate,
+      field_link: certification.link,
+    });
+    setLoading(false);
+    if (result.succeeded) {
       push(`/worklog/${slug}`);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
     }
   };
   return (

@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { useAuth } from "./auth/AuthContext";
+import { Button } from "./components";
 
 const links = [
   {
@@ -8,6 +10,7 @@ const links = [
 ];
 
 export function Layout({ children }) {
+  const { user, login, logout } = useAuth();
   return (
     <div maxW="640px" mx="auto">
       <header>
@@ -29,7 +32,7 @@ export function Layout({ children }) {
             </a>
           </Link>
           <nav>
-            <ul display="grid" col={links.length} gap="4">
+            <ul display="grid" col={3} gap="4">
               {links.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} passHref>
@@ -39,6 +42,14 @@ export function Layout({ children }) {
                   </Link>
                 </li>
               ))}
+              {user ? (
+                <>
+                  <li>Hi, {user.name}</li>
+                  <li onClick={logout}>Logout</li>
+                </>
+              ) : (
+                <li onClick={login}>Login</li>
+              )}
             </ul>
           </nav>
         </div>

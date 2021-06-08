@@ -1,11 +1,12 @@
+import { useEffect, useState } from "react";
 import { getEntitiesFromContext } from "next-drupal";
 import Link from "next/link";
 import Image from "next/image";
-
 import { Layout } from "../src/layout";
 import { formatDate } from "../src/utils/format-date";
 import { useRouter } from "next/router";
 import Button from "../src/components/Button";
+import { useAuth } from "../src/auth/AuthContext";
 
 export default function IndexPage({ worklogs }) {
   const router = useRouter();
@@ -25,6 +26,8 @@ export default function IndexPage({ worklogs }) {
           Worklogs
         </h1>
         <Button onClick={handleAddWorklog} label="Add New" />
+
+
       </div>
 
       {worklogs?.length ? (

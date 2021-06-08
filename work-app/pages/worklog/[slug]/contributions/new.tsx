@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { addChildEntity, ChildEntity } from "../../../../src/api/client";
 import { Input, Select, Button } from "../../../../src/components";
 import { Layout } from "../../../../src/layout";
 import { Source } from "../../../../src/types";
@@ -51,12 +52,12 @@ export type Contribution = {
   important: boolean;
   date: string;
 };
-
-export const AddContribution = ({}) => {
-  const {
-    query: { slug, id },
-    push,
-  } = useRouter();
+export type ContributionProps = {
+  slug: string | string[];
+  id: string;
+};
+export const AddContribution = ({ slug, id }: ContributionProps) => {
+  const { push } = useRouter();
 
   const {
     handleSubmit,
@@ -76,65 +77,17 @@ export const AddContribution = ({}) => {
 
   const submit = async (contribution: Contribution) => {
     setLoading(true);
-    console.log(contribution);
-    const payload = {
-      data: {
-        type: "paragraph--contribution",
-        attributes: {
-          field_title: contribution.title,
-          field_contribution_date: contribution.date,
-          field_contribution_important: contribution.important,
-          field_contribution_source: contribution.link,
-          field_contribution_type: contribution.type,
-          field_technology: contribution.technology,
-        },
-      },
-    };
-    console.log(JSON.stringify(payload));
-
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_JSON_API_URL}/paragraph/contribution`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
-            "Content-Type": "application/vnd.api+json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
-      const paragraph = await response.json();
-      console.log(paragraph);
-
-      const newPayload = {
-        data: [
-          {
-            type: "paragraph--contribution",
-            id: paragraph.data.id,
-            meta: {
-              target_revision_id:
-                paragraph.data.attributes.drupal_internal__revision_id,
-            },
-          },
-        ],
-      };
-      const res = await fetch(
-        `${process.env.NEXT_JSON_API_URL}/node/work_log/${id}/relationships/field_contributions`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
-            "Content-Type": "application/vnd.api+json",
-          },
-          body: JSON.stringify(newPayload),
-        }
-      );
-      setLoading(false);
+    const result = await addChildEntity(id, ChildEntity.Contribution, {
+      field_title: contribution.title,
+      field_contribution_date: contribution.date,
+      field_contribution_important: contribution.important,
+      field_contribution_source: contribution.link,
+      field_contribution_type: contribution.type,
+      field_technology: contribution.technology,
+    });
+    setLoading(false);
+    if (result.succeeded) {
       push(`/worklog/${slug}`);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
     }
   };
   return (

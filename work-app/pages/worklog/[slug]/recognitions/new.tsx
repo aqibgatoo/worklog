@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { addChildEntity, ChildEntity } from "../../../../src/api/client";
 import { Input, Button } from "../../../../src/components";
 import { Layout } from "../../../../src/layout";
 import { Source } from "../../../../src/types";
@@ -24,12 +25,8 @@ export type RecognitionProps = {
   id: string;
   onSuccess: (value: boolean) => void;
 };
-
 export const AddRecognition = ({ slug, id, onSuccess }: RecognitionProps) => {
-  const {
-    // query: { slug, id },
-    push,
-  } = useRouter();
+  const { push } = useRouter();
 
   const {
     handleSubmit,
@@ -49,71 +46,21 @@ export const AddRecognition = ({ slug, id, onSuccess }: RecognitionProps) => {
 
   const submit = async (recognition: Recognition) => {
     setLoading(true);
-    console.log(recognition);
-    const payload = {
-      data: {
-        type: "paragraph--recognition",
-        attributes: {
-          field_description: recognition.description,
-          field_important_recognition: recognition.important,
-          field_recognized_by: recognition.recognizedBy,
-          field_recognized_for: recognition.recognizedFor,
-          field_source: recognition.link.uri
-            ? {
-                uri: recognition.link.uri,
-                title: recognition.link.title,
-              }
-            : {},
-        },
-      },
-    };
-    console.log(JSON.stringify(payload));
-
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_JSON_API_URL}/paragraph/recognition`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
-            "Content-Type": "application/vnd.api+json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
-      const paragraph = await response.json();
-      console.log(paragraph);
-
-      const newPayload = {
-        data: [
-          {
-            type: "paragraph--recognition",
-            id: paragraph.data.id,
-            meta: {
-              target_revision_id:
-                paragraph.data.attributes.drupal_internal__revision_id,
-            },
-          },
-        ],
-      };
-      const res = await fetch(
-        `${process.env.NEXT_JSON_API_URL}/node/work_log/${id}/relationships/field_recognitions`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
-            "Content-Type": "application/vnd.api+json",
-          },
-          body: JSON.stringify(newPayload),
-        }
-      );
-      setLoading(false);
-      reset();
-      onSuccess(false);
+    const result = await addChildEntity(id, ChildEntity.Recognition, {
+      field_description: recognition.description,
+      field_important_recognition: recognition.important,
+      field_recognized_by: recognition.recognizedBy,
+      field_recognized_for: recognition.recognizedFor,
+      field_source: recognition.link.uri
+        ? {
+            uri: recognition.link.uri,
+            title: recognition.link.title,
+          }
+        : {},
+    });
+    setLoading(false);
+    if (result.succeeded) {
       push(`/worklog/${slug}`);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
     }
   };
   return (

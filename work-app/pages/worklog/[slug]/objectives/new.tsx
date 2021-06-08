@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { addChildEntity, ChildEntity } from "../../../../src/api/client";
 import { Input, Button } from "../../../../src/components";
 import { Layout } from "../../../../src/layout";
 import { Source } from "../../../../src/types";
@@ -23,12 +24,12 @@ export type Objective = {
   type: ObjectiveType;
   important: boolean;
 };
-
-export const AddObjective = ({}) => {
-  const {
-    query: { slug, id },
-    push,
-  } = useRouter();
+export type ObjectiveProps = {
+  slug: string | string[];
+  id: string;
+};
+export const AddObjective = ({ slug, id }: ObjectiveProps) => {
+  const { push } = useRouter();
 
   const {
     handleSubmit,
@@ -63,76 +64,28 @@ export const AddObjective = ({}) => {
 
   const submit = async (objective: Objective) => {
     setLoading(true);
-    console.log(objective);
-    const payload = {
-      data: {
-        type: "paragraph--objective",
-        attributes: {
-          field_description_objective: objective.description,
-          field_goal: objective.goal,
-          field_important: objective.important,
-          field_source_objective: objective.links
-            .filter((link) => link.uri)
-            .map(({ uri, title }) => {
-              return {
-                uri,
-                title,
-              };
-            }),
-          field_type: objective.type,
-          field_stakeholders: objective.stakeholders
-            .filter((stakeholder) => stakeholder.name)
-            .map(({ name }) => {
-              return name;
-            }),
-        },
-      },
-    };
-    console.log(JSON.stringify(payload));
-
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_JSON_API_URL}/paragraph/objective`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
-            "Content-Type": "application/vnd.api+json",
-          },
-          body: JSON.stringify(payload),
-        }
-      );
-      const paragraph = await response.json();
-      console.log(paragraph);
-
-      const newPayload = {
-        data: [
-          {
-            type: "paragraph--objective",
-            id: paragraph.data.id,
-            meta: {
-              target_revision_id:
-                paragraph.data.attributes.drupal_internal__revision_id,
-            },
-          },
-        ],
-      };
-      const res = await fetch(
-        `${process.env.NEXT_JSON_API_URL}/node/work_log/${id}/relationships/field_objectives`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
-            "Content-Type": "application/vnd.api+json",
-          },
-          body: JSON.stringify(newPayload),
-        }
-      );
-      setLoading(false);
+    const result = await addChildEntity(id, ChildEntity.Objective, {
+      field_description_objective: objective.description,
+      field_goal: objective.goal,
+      field_important: objective.important,
+      field_source_objective: objective.links
+        .filter((link) => link.uri)
+        .map(({ uri, title }) => {
+          return {
+            uri,
+            title,
+          };
+        }),
+      field_type: objective.type,
+      field_stakeholders: objective.stakeholders
+        .filter((stakeholder) => stakeholder.name)
+        .map(({ name }) => {
+          return name;
+        }),
+    });
+    setLoading(false);
+    if (result.succeeded) {
       push(`/worklog/${slug}`);
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
     }
   };
   return (
