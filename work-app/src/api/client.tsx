@@ -18,19 +18,26 @@ const createWorkLog = async (url: RequestInfo, payload: RequestInit) => {
 export type APIResult = {
   succeeded: boolean;
 };
+
+export type ChildEntity =
+  | "certificate"
+  | "recognition"
+  | "project"
+  | "contribution"
+  | "objective";
 // Entity to realationship mapping
-export enum ChildEntity {
-  Certificate = "certifications",
-  Recognition = "recognitions",
-  Project = "projects",
-  Contribution = "contributions",
-  Objective = "objectives",
+export enum ChildEntityParentRelationship {
+  "certificate" = "certifications",
+  "recognition" = "recognitions",
+  "project" = "projects",
+  "contribution" = "contributions",
+  "objective" = "objectives",
 }
 
 const addChildEntity = async (
   parentEntityId: string,
   type: ChildEntity,
-  attributes: object
+  attributes: Object
 ): Promise<APIResult> => {
   const method = "POST";
   const headers = {
@@ -41,14 +48,14 @@ const addChildEntity = async (
   // console.log(certification);
   const childEntityPayload = {
     data: {
-      type: `paragraph--${ChildEntity[type]}`,
+      type: `paragraph--${type}`,
       attributes: attributes,
     },
   };
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_JSON_API_URL}/paragraph/${ChildEntity[type]}`,
+      `${process.env.NEXT_PUBLIC_JSON_API_URL}/paragraph/${type}`,
       {
         method,
         headers,
@@ -70,7 +77,7 @@ const addChildEntity = async (
       ],
     };
     const res = await fetch(
-      `${process.env.NEXT_JSON_API_URL}/node/work_log/${parentEntityId}/relationships/field_${type}`,
+      `${process.env.NEXT_JSON_API_URL}/node/work_log/${parentEntityId}/relationships/field_${ChildEntityParentRelationship[type]}`,
       {
         method,
         headers,
@@ -82,6 +89,7 @@ const addChildEntity = async (
   } catch (error) {
     // setLoading(false);
     console.log(error);
+    return { succeeded: true };
   }
   return { succeeded: true };
 };

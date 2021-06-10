@@ -64,7 +64,7 @@ export const AddObjective = ({ slug, id }: ObjectiveProps) => {
 
   const submit = async (objective: Objective) => {
     setLoading(true);
-    const result = await addChildEntity(id, ChildEntity.Objective, {
+    const result = await addChildEntity(id, "objective", {
       field_description_objective: objective.description,
       field_goal: objective.goal,
       field_important: objective.important,

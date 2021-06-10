@@ -35,7 +35,7 @@ export const AddProject = ({ slug, id }: ProjectProps) => {
 
   const submit = async (project: Project) => {
     setLoading(true);
-    const result = await addChildEntity(id, ChildEntity.Project, {
+    const result = await addChildEntity(id, "project", {
       field_project_description: project.description,
       field_project_title: project.title,
       field_start_date: project.startDate,

@@ -36,7 +36,7 @@ export const AddCertification = ({ slug, id }: CertificationProps) => {
   // });
   const submit = async (certification: Certification) => {
     setLoading(true);
-    const result = await addChildEntity(id, ChildEntity.Certificate, {
+    const result = await addChildEntity(id, "certificate", {
       field_certification_title: certification.title,
       field_completion_date: certification.completionDate,
       field_link: certification.link,

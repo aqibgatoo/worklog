@@ -10,6 +10,8 @@ import Collapsible from "../../../src/components/Collapsible";
 import AddCertification from "./certifications/new";
 import { useState } from "react";
 import AddRecognition from "./recognitions/new";
+import { addChildEntity } from "../../../src/api/client";
+import RecognitionSection from "./recognitions/RecognitionSection";
 export default function Index({ worklog }) {
   if (!worklog) return null;
   const {
@@ -21,6 +23,14 @@ export default function Index({ worklog }) {
   const handleAdd = (route: string) => () => {
     console.log(worklog);
     push(`${route}?id=${worklog.id}`);
+  };
+  const submit = async (id, childEntity, attributes): Promise<boolean> => {
+    // setLoading(true);
+    const result = await addChildEntity(id, childEntity, attributes);
+    // setLoading(false);
+    if (result.succeeded) {
+      return true;
+    }
   };
 
   return (
@@ -41,71 +51,7 @@ export default function Index({ worklog }) {
           </span>
         </div>
         <hr />
-        <div display="flex" flexDirection="column">
-          <div
-            display="flex"
-            flexDirection="row"
-            justifyContent="space-between"
-          >
-            <h2 fontSize="2xl">Recognitions</h2>
-            <Button
-              onClick={() => setAddCertification(!addCertification)}
-              label=" Add New"
-            />
-          </div>
-          <div>
-            <div
-              p="2"
-              backgroundColor="#141923"
-              rounded="3"
-              m="2"
-              className={addCertification ? "expanded" : "collapsed"}
-            >
-              <AddRecognition
-                slug={slug}
-                id={worklog.id}
-                onSuccess={setAddCertification}
-              />
-            </div>
-          </div>
-          {worklog.field_recognitions.length ? (
-            worklog.field_recognitions.map(
-              ({
-                id,
-                created,
-                field_important_recognition,
-                field_description,
-                field_recognized_by,
-                field_recognized_for,
-                field_source,
-              }) => (
-                <div key={id} mt="2">
-                  <Collapsible title={field_description.value}>
-                    <Recognition
-                      createdAt={created}
-                      important={field_important_recognition}
-                      description={field_description.processed}
-                      recognizedBy={field_recognized_by}
-                      recognizedFor={field_recognized_for}
-                      sources={[{ ...field_source }]}
-                    />
-                  </Collapsible>
-                </div>
-              )
-            )
-          ) : (
-            <p>No Recognitions found</p>
-          )}
-        </div>
-
-        {worklog.field_recognitions.length > 0 && (
-          <Link href={`${slug}/recognitions`} passHref>
-            <a variant="button.link">
-              View
-              <Icon name="arrow" ml="1" />
-            </a>
-          </Link>
-        )}
+        <RecognitionSection worklog={worklog} />
         <hr />
         <div
           display="flex"

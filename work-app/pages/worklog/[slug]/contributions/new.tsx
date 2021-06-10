@@ -77,7 +77,7 @@ export const AddContribution = ({ slug, id }: ContributionProps) => {
 
   const submit = async (contribution: Contribution) => {
     setLoading(true);
-    const result = await addChildEntity(id, ChildEntity.Contribution, {
+    const result = await addChildEntity(id, "contribution", {
       field_title: contribution.title,
       field_contribution_date: contribution.date,
       field_contribution_important: contribution.important,
