@@ -46,7 +46,7 @@ const getComponent = (type: ComponentType, data: any): ReactElement => {
       return (
         <Recognition
           createdAt={data.created}
-          description={data.field_description}
+          description={data.field_description.processed}
           important={data.field_important_recognition}
           recognizedFor={data.field_recognized_for}
           recognizedBy={data.field_recognized_by}
@@ -79,7 +79,7 @@ const getComponent = (type: ComponentType, data: any): ReactElement => {
           title={data.field_project_title}
           startDate={data.field_start_date}
           endDate={data.field_end_date}
-          description={data.field_project_description}
+          description={data.field_project_description.processed}
         />
       );
     case ComponentType.Contribution:
