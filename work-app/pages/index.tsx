@@ -26,8 +26,6 @@ export default function IndexPage({ worklogs }) {
           Worklogs
         </h1>
         <Button onClick={handleAddWorklog} label="Add New" />
-
-
       </div>
 
       {worklogs?.length ? (

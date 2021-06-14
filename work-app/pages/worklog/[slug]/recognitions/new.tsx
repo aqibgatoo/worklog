@@ -47,7 +47,7 @@ export const AddRecognition = ({ slug, id, onSaved }: RecognitionProps) => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit(submit)}>
+      <form>
         <div display="flex" flexDirection="column">
           <Controller
             control={control}

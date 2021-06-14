@@ -1,4 +1,5 @@
 export type Worklog = {
+  id: string;
   name: string;
   age: number;
 };

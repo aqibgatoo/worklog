@@ -19,7 +19,7 @@ const Recognition = ({
   recognizedFor,
   recognizedBy,
   sources,
-}: RecognitionProps) => {
+}) => {
   return (
     <div>
       <div
@@ -29,7 +29,7 @@ const Recognition = ({
         mb="3"
       >
         <p>{formatDate(createdAt)}</p>
-        {important && <Icon name="star" size="8"  />}
+        {important && <Icon name="star" size="8" />}
       </div>
       <div
         dangerouslySetInnerHTML={{
