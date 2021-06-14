@@ -35,6 +35,8 @@ const RootComponent = ({ data }) => {
 
 // Returns comoponent based on component type passed
 const getComponent = (type: ComponentType, data: any): ReactElement => {
+  console.log(data);
+
   switch (type) {
     case ComponentType.Worklog:
       return <WorklogItem data={data} />;
@@ -48,7 +50,7 @@ const getComponent = (type: ComponentType, data: any): ReactElement => {
           important={data.field_important_recognition}
           recognizedFor={data.field_recognized_for}
           recognizedBy={data.field_recognized_by}
-          sources={data.field_source}
+          sources={[{ ...data.field_source }]}
         />
       );
     case ComponentType.Certification:
@@ -56,7 +58,7 @@ const getComponent = (type: ComponentType, data: any): ReactElement => {
         <Certification
           title={data.field_certification_title}
           completionDate={data.field_completion_date}
-          source={data.field_link}
+          source={{ ...data.field_link }}
         />
       );
     case ComponentType.Objective:
@@ -88,7 +90,7 @@ const getComponent = (type: ComponentType, data: any): ReactElement => {
           createdAt={data.created}
           type={data.field_contribution_type}
           important={data.field_contribution_important}
-          sources={data.field_contribution_source}
+          sources={[{ ...data.field_contribution_source }]}
         />
       );
     default:
