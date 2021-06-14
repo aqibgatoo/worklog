@@ -1,22 +1,20 @@
 import { getEntitiesFromContext, getEntityFromContext } from "next-drupal";
 import RootComponent from "../../src/dynamicCompoents/RootComponent";
 import { Layout } from "../../src/layout";
-import { normalize, NormalizedResponse } from "../../src/utils/mapper";
-const Index = ({ worklogs }) => {
-  const json: NormalizedResponse = normalize(worklogs, "worklogs");
+const Index = ({ data }) => {
   return (
     <Layout>
-      <RootComponent data={json.data.components} />
+      <RootComponent data={data} />
     </Layout>
   );
 };
 
 export async function getServerSideProps(context) {
   const id = context.query?.id;
-  const worklogs = await getEntitiesFromContext("node", "work_log", context, {
+  const data = await getEntitiesFromContext("node", "work_log", context, {
     params: {
       include:
-        "field_certifications,field_contributions,field_objectives,field_projects,field_recognitions,field_user",
+        "field_certifications,field_contributions,field_objectives,field_projects,field_recognitions,field_highlights,field_user",
       sort: "-created",
     },
     filter: (entity) => (id ? entity.id === id : true),
@@ -24,7 +22,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-      worklogs: worklogs,
+      data,
       revalidate: 1,
     },
   };

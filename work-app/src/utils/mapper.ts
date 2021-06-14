@@ -6,14 +6,15 @@ export type Component = {
   data: any;
 };
 
-export type ComponentType =
-  | "highlights"
-  | "recognitions"
-  | "objectives"
-  | "certifications"
-  | "contributions"
-  | "worklogs"
-  | "projects";
+export enum ComponentType {
+  Highlights = "highlights",
+  Recognition = "paragraph--recognition",
+  Objective = "paragraph--objective",
+  Certification = "paragraph--certificate",
+  Contribution = "paragraph--contribution",
+  Worklog = "node--work_log",
+  Project = "paragraph--project",
+}
 
 // For the time being consider the data as being worklogs array
 export const normalize = (

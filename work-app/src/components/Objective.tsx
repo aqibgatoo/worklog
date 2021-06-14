@@ -22,8 +22,6 @@ const Objective = ({
   stakeholders,
   sources,
 }: ObjectiveProps) => {
-  console.log(stakeholders);
-
   return (
     <div>
       <h4>{goal}</h4>
