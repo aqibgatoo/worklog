@@ -16,6 +16,8 @@ import CertificationSection from "./CertificationSection";
 import ContributionSection from "./ContributionSection";
 import Collapsible from "./Collapsible";
 import RootComponent from "./RootComponent";
+import LoginForm from "./LoginForm";
+import SignUpForm from "./SignUpForm";
 export {
   Reference,
   Certification,
@@ -34,5 +36,7 @@ export {
   CertificationSection,
   ContributionSection,
   Collapsible,
-  RootComponent
+  RootComponent,
+  LoginForm,
+  SignUpForm,
 };

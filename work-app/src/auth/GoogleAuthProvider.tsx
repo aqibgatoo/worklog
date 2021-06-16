@@ -4,10 +4,10 @@ import { gapi, loadAuth2 } from "gapi-script";
 
 //TODO: Not sure if it is correct
 type GoogleAuth = gapi.auth2.GoogleAuth;
-type AuthProviderProps = {
+type GoogleAuthProviderProps = {
   children: ReactNode;
 };
-const AuthProvider = ({ children }: AuthProviderProps) => {
+const GoogleAuthProvider = ({ children }: GoogleAuthProviderProps) => {
   const [user, setUser] = useState<User>(null);
   useEffect(() => {
     const init = async () => {
@@ -21,7 +21,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           .getAuthInstance()
           .currentUser.get()
           .getBasicProfile();
-        setUser({ name: user.getName(), email: user.getEmail() });
+        setUser({ username: user.getName(), email: user.getEmail() });
       }
     };
     init();
@@ -35,7 +35,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         .getAuthInstance()
         .currentUser.get()
         .getBasicProfile();
-      setUser({ name: user.getName(), email: user.getEmail() });
+      setUser({ username: user.getName(), email: user.getEmail() });
       const result = await fetch(
         `${process.env.NEXT_PUBLIC_DRUPAL_BASE_URL}/user/login/google`,
         {
@@ -61,12 +61,15 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     setUser(null);
   };
 
+  const signUp = () => {};
+
   const value = {
     user,
     login,
+    signUp,
     logout,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export default AuthProvider;
+export default GoogleAuthProvider;

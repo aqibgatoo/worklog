@@ -44,11 +44,17 @@ export function Layout({ children }) {
               ))}
               {user ? (
                 <>
-                  <li>Hi, {user.name}</li>
+                  <li>Hi, {user.username}</li>
                   <li onClick={logout}>Logout</li>
                 </>
               ) : (
-                <li onClick={login}>Login</li>
+                <li>
+                  <Link href="/login" passHref>
+                    <a textDecoration="none" color="text" fontSize="sm">
+                      Login/SignUp
+                    </a>
+                  </Link>
+                </li>
               )}
             </ul>
           </nav>

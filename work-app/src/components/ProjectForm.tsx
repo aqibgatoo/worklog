@@ -109,14 +109,7 @@ export const ProjectForm = ({ slug, id }: ProjectProps) => {
             />
           )}
         />
-        <input
-          type="submit"
-          p="2"
-          px="4"
-          bg="green"
-          color="white"
-          rounded="2"
-        />
+        <Button label="Submit" loading={loading} type="submit" />
       </form>
     </div>
   );
