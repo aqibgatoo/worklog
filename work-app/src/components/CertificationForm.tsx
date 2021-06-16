@@ -1,22 +1,22 @@
-import { link } from "fs";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
-import { addChildEntity, ChildEntity } from "../../../../src/api/client";
-import { Input, Button } from "../../../../src/components";
-import { Layout } from "../../../../src/layout";
-import { Source } from "../../../../src/types";
+import { addChildEntity, ChildEntity } from "../../src/api/client";
+import { Input, Button } from "../../src/components";
+import { Source } from "../../src/types";
 
 export type Certification = {
   title: string;
   link?: Source;
   completionDate: string;
 };
+
 export type CertificationProps = {
   slug: string | string[];
   id: string;
 };
-export const AddCertification = ({ slug, id }: CertificationProps) => {
+
+export const ContributionForm = ({ slug, id }: CertificationProps) => {
   const { push } = useRouter();
   const {
     handleSubmit,
@@ -47,7 +47,7 @@ export const AddCertification = ({ slug, id }: CertificationProps) => {
     }
   };
   return (
-    <>
+    <div>
       <form onSubmit={handleSubmit(submit)}>
         <Controller
           control={control}
@@ -108,15 +108,15 @@ export const AddCertification = ({ slug, id }: CertificationProps) => {
             <Input
               value={value}
               handleInputChange={onChange}
-              label="Completiong Date"
+              label="Completion Date"
               type="date"
             />
           )}
         />
         <Button label="Submit" loading={loading} type="submit" />
       </form>
-    </>
+    </div>
   );
 };
 
-export default AddCertification;
+export default ContributionForm;

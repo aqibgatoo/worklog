@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
-import { addChildEntity, ChildEntity } from "../../../../src/api/client";
-import { Input, Button } from "../../../../src/components";
-import { Layout } from "../../../../src/layout";
-import { Source } from "../../../../src/types";
+import { addChildEntity, ChildEntity } from "../../src/api/client";
+import { Input, Button } from "../../src/components";
+import { Layout } from "../../src/layout";
+import { Source } from "../../src/types";
 
 export enum ObjectiveType {
   "Select" = "Select",
@@ -28,7 +28,7 @@ export type ObjectiveProps = {
   slug: string | string[];
   id: string;
 };
-export const AddObjective = ({ slug, id }: ObjectiveProps) => {
+export const ObjectiveForm = ({ slug, id }: ObjectiveProps) => {
   const { push } = useRouter();
 
   const {
@@ -89,9 +89,7 @@ export const AddObjective = ({ slug, id }: ObjectiveProps) => {
     }
   };
   return (
-    <Layout>
-      <h3>New Objective</h3>
-      <hr />
+    <div>
       <form onSubmit={handleSubmit(submit)}>
         <Controller
           control={control}
@@ -285,8 +283,8 @@ export const AddObjective = ({ slug, id }: ObjectiveProps) => {
 
         <Button label="Submit" loading={loading} type="submit" />
       </form>
-    </Layout>
+    </div>
   );
 };
 
-export default AddObjective;
+export default ObjectiveForm;

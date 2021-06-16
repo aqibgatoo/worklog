@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
-import { addChildEntity, ChildEntity } from "../../../../src/api/client";
-import { Input, Button } from "../../../../src/components";
-import { Layout } from "../../../../src/layout";
-import { Source } from "../../../../src/types";
+import { addChildEntity, ChildEntity } from "../../src/api/client";
+import { Input, Button } from "../../src/components";
+import { Layout } from "../../src/layout";
+import { Source } from "../../src/types";
 
 export type Project = {
   title: string;
@@ -16,7 +16,7 @@ export type ProjectProps = {
   slug: string | string[];
   id: string;
 };
-export const AddProject = ({ slug, id }: ProjectProps) => {
+export const ProjectForm = ({ slug, id }: ProjectProps) => {
   const { push } = useRouter();
 
   const {
@@ -47,9 +47,7 @@ export const AddProject = ({ slug, id }: ProjectProps) => {
     }
   };
   return (
-    <Layout>
-      <h3>New Project</h3>
-      <hr />
+    <div>
       <form onSubmit={handleSubmit(submit)}>
         <Controller
           control={control}
@@ -120,8 +118,8 @@ export const AddProject = ({ slug, id }: ProjectProps) => {
           rounded="2"
         />
       </form>
-    </Layout>
+    </div>
   );
 };
 
-export default AddProject;
+export default ProjectForm;

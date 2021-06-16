@@ -9,10 +9,11 @@ import {
   Recognition,
   Project,
   Contribution,
-} from "../components";
+} from ".";
+import WorklogDetails from "./WorklogDetails";
 
 export interface RootComponentProps {
-  data?: any;
+  data: any[];
 }
 
 //Root Component reprsents the root of component hierarchy on a page
@@ -21,6 +22,16 @@ const RootComponent = ({ data }) => {
   const {
     query: { type },
   } = useRouter();
+  //   <div
+  //   display="flex"
+  //   justifyContent="space-between"
+  //   alignItems="flex-start"
+  // >
+  //   <h1 variant="heading.h2" mb="10">
+  //     Worklogs
+  //   </h1>
+  //   <Button onClick={handleAddWorklog} label="Add New" />
+  // </div>
 
   return (
     <div>
@@ -34,14 +45,12 @@ const RootComponent = ({ data }) => {
 };
 
 // Returns comoponent based on component type passed
-const getComponent = (type: ComponentType, data: any): ReactElement => {
-  console.log(data);
-
+export const getComponent = (type: ComponentType, data: any): ReactElement => {
   switch (type) {
     case ComponentType.Worklog:
       return <WorklogItem data={data} />;
-    case ComponentType.Highlights:
-      return <HighlightsList data={data} />;
+    case ComponentType.WorklogDetails:
+      return <WorklogDetails data={data} />;
     case ComponentType.Recognition:
       return (
         <Recognition
@@ -98,28 +107,11 @@ const getComponent = (type: ComponentType, data: any): ReactElement => {
   }
 };
 
-export type HighlightsProps = {
-  data: any;
-};
-
-const HighlightsList = ({ data }: HighlightsProps) => {
-  return (
-    <div>
-      {data.field_highlights.map((item, index) => (
-        <div key={`${item.type}${index}`}>
-          {getComponent(item.type, item)}
-          <hr />
-        </div>
-      ))}
-    </div>
-  );
-};
-
 const WorklogItem = ({ data: worklog }) => {
   return (
     <article>
       <Link
-        href={`/wg${worklog.path.alias}?id=${worklog.id}&type=highlights`}
+        href={`${worklog.path.alias}?id=${worklog.id}&type=worklog_details`}
         passHref
       >
         <a textDecoration="none">

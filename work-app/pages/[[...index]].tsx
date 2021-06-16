@@ -1,6 +1,6 @@
-import { getEntitiesFromContext, getEntityFromContext } from "next-drupal";
-import RootComponent from "../../src/dynamicCompoents/RootComponent";
-import { Layout } from "../../src/layout";
+import { getEntitiesFromContext } from "next-drupal";
+import { RootComponent } from "../src/components";
+import { Layout } from "../src/layout";
 const Index = ({ data }) => {
   return (
     <Layout>

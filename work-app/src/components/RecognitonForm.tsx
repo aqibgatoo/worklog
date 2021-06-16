@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
-import { addChildEntity, ChildEntity } from "../../../../src/api/client";
-import { Input, Button } from "../../../../src/components";
-import { Layout } from "../../../../src/layout";
-import { Source } from "../../../../src/types";
+import { addChildEntity, ChildEntity } from "../../src/api/client";
+import { Input, Button } from "../../src/components";
+import { Layout } from "../../src/layout";
+import { Source } from "../../src/types";
 
 export enum RecognitionValue {
   "Select" = "None",
@@ -23,11 +23,10 @@ export type Recognition = {
 export type RecognitionProps = {
   slug: string | string[];
   id: string;
-  onSaved: (value: boolean) => void;
 };
-export const AddRecognition = ({ slug, id, onSaved }: RecognitionProps) => {
-  const { push } = useRouter();
-
+export const RecognitionForm = ({ slug, id }: RecognitionProps) => {
+  const { replace } = useRouter();
+  const [loading, setLoading] = useState(false);
   const {
     handleSubmit,
     control,
@@ -42,12 +41,29 @@ export const AddRecognition = ({ slug, id, onSaved }: RecognitionProps) => {
       recognizedBy: "",
     },
   });
-  const [loading, setLoading] = useState(false);
 
-
+  const submit = async (recognition: Recognition) => {
+    setLoading(true);
+    const result = await addChildEntity(id, "recognition", {
+      field_description: recognition.description,
+      field_important_recognition: recognition.important,
+      field_recognized_by: recognition.recognizedBy,
+      field_recognized_for: recognition.recognizedFor,
+      field_source: recognition.link.uri
+        ? {
+            uri: recognition.link.uri,
+            title: recognition.link.title,
+          }
+        : {},
+    });
+    setLoading(false);
+    if (result.succeeded) {
+      replace(`/worklog/${slug}`);
+    }
+  };
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit(submit)}>
         <div display="flex" flexDirection="column">
           <Controller
             control={control}
@@ -160,10 +176,10 @@ export const AddRecognition = ({ slug, id, onSaved }: RecognitionProps) => {
             />
           )}
         />
+        <Button label="Submit" loading={loading} type="submit" />
       </form>
-      <Button label="Submit" loading={loading} type="submit" />x
     </div>
   );
 };
 
-export default AddRecognition;
+export default RecognitionForm;

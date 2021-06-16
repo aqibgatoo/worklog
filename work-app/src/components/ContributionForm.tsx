@@ -1,10 +1,9 @@
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
-import { addChildEntity, ChildEntity } from "../../../../src/api/client";
-import { Input, Select, Button } from "../../../../src/components";
-import { Layout } from "../../../../src/layout";
-import { Source } from "../../../../src/types";
+import { addChildEntity, ChildEntity } from "../../src/api/client";
+import { Input, Select, Button } from "../../src/components";
+import { Source } from "../../src/types";
 
 export enum ContributionType {
   "Select" = "None",
@@ -56,7 +55,7 @@ export type ContributionProps = {
   slug: string | string[];
   id: string;
 };
-export const AddContribution = ({ slug, id }: ContributionProps) => {
+export const ContributionForm = ({ slug, id }: ContributionProps) => {
   const { push } = useRouter();
 
   const {
@@ -91,9 +90,7 @@ export const AddContribution = ({ slug, id }: ContributionProps) => {
     }
   };
   return (
-    <Layout>
-      <h3>New Conribution</h3>
-      <hr />
+    <div>
       <form onSubmit={handleSubmit(submit)}>
         <Controller
           control={control}
@@ -179,66 +176,6 @@ export const AddContribution = ({ slug, id }: ContributionProps) => {
             />
           </div>
         </div>
-        {/* {fields.map((item, index) => (
-            <div
-            key={item.id}
-            display="flex"
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Controller
-              control={control}
-              rules={{ required: true }}
-              name={`links.${index}.url`}
-              render={({ field: { onChange, onBlur, value, ref } }) => (
-                <Input
-                  value={value}
-                  handleInputChange={onChange}
-                  label="URL"
-                  type="text"
-                  placeholder="https://www.google.com"
-                />
-              )}
-            />
-            <Controller
-              control={control}
-              name={`links.${index}.linkText`}
-              render={({ field: { onChange, onBlur, value, ref } }) => (
-                <Input
-                  value={value}
-                  handleInputChange={onChange}
-                  label="Link Text"
-                  type="text"
-                  placeholder=""
-                />
-              )}
-            />
-
-            <button
-              disabled={index === 0}
-              p="2"
-              px="4"
-              bg="green"
-              color="white"
-              onClick={() => remove(index)}
-            >
-              Delete
-            </button>
-          </div>
-        ))} */}
-
-        {/* <button
-          p="2"
-          px="4"
-          mb="3"
-          bg="green"
-          color="white"
-          onClick={() => append({ url: "", linkText: "" })}
-        >
-          Append
-        </button> */}
-
         <Controller
           control={control}
           name="date"
@@ -266,8 +203,8 @@ export const AddContribution = ({ slug, id }: ContributionProps) => {
         />
         <Button label="Submit" loading={loading} type="submit" />
       </form>
-    </Layout>
+    </div>
   );
 };
 
-export default AddContribution;
+export default ContributionForm;

@@ -7,7 +7,7 @@ export type Component = {
 };
 
 export enum ComponentType {
-  Highlights = "highlights",
+  WorklogDetails = "worklog_details",
   Recognition = "paragraph--recognition",
   Objective = "paragraph--objective",
   Certification = "paragraph--certificate",

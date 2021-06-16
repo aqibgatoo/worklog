@@ -8,6 +8,14 @@ import Input from "./Input";
 import Select from "./Select";
 import Button from "./Button";
 import Loader from "./Loader";
+import RecognitionForm from "./RecognitonForm";
+import RecognitionSection from "./RecognitionSection";
+import ObjectiveSection from "./ObjectiveSection";
+import ProjectSection from "./ProjectSection";
+import CertificationSection from "./CertificationSection";
+import ContributionSection from "./ContributionSection";
+import Collapsible from "./Collapsible";
+import RootComponent from "./RootComponent";
 export {
   Reference,
   Certification,
@@ -19,4 +27,12 @@ export {
   Select,
   Button,
   Loader,
+  RecognitionForm,
+  RecognitionSection,
+  ObjectiveSection,
+  ProjectSection,
+  CertificationSection,
+  ContributionSection,
+  Collapsible,
+  RootComponent
 };

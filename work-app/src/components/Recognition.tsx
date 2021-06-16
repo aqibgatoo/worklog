@@ -40,11 +40,14 @@ const Recognition = ({
         Recognized for <strong>{recognizedFor}</strong> - by{" "}
         <strong>{recognizedBy}</strong>
       </p>
-
-      <h5 mt="3">References</h5>
-      {sources.map(({ uri, title }, index) => (
-        <Reference key={uri} uri={uri} title={title} index={index + 1} />
-      ))}
+      {!!sources.length && (
+        <>
+          <h5 mt="3">References</h5>
+          {sources.map(({ uri, title }, index) => (
+            <Reference key={uri} uri={uri} title={title} index={index + 1} />
+          ))}
+        </>
+      )}
     </div>
   );
 };

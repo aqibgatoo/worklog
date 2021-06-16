@@ -1,18 +1,11 @@
-import Image from "next/image";
 import Link from "next/link";
-import { getPathsForEntityType, getEntityFromContext } from "next-drupal";
-import { Button, Recognition } from "../../../../src/components";
-import { Layout } from "../../../../src/layout";
-import { formatDate } from "../../../../src/utils/format-date";
+import { Button, Recognition } from ".";
 import { Icon } from "reflexjs";
 import { useRouter } from "next/router";
-import Collapsible from "../../../../src/components/Collapsible";
-import AddCertification from "../certifications/new";
+import Collapsible from "./Collapsible";
 import { useState } from "react";
-import AddRecognition from "./new";
-import { addChildEntity } from "../../../../src/api/client";
 import RecognitionForm from "./RecognitonForm";
-import CollapsibleWithoutTitle from "../../../../src/components/CollapsibleWithoutTitle";
+import CollapsibleWithoutTitle from "./CollapsibleWithoutTitle";
 const RecognitionSection = ({ worklog }) => {
   if (!worklog) return null;
   const {
