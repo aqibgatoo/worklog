@@ -18,25 +18,6 @@ import { useState } from "react";
 import { addChildEntity } from "../api/client";
 import { getComponent } from "./RootComponent";
 const WorklogDetails = ({ data: worklog }) => {
-  // const {
-  //   push,
-  //   query: { slug },
-  // } = useRouter();
-
-  // const [addCertification, setAddCertification] = useState(false);
-  // const handleAdd = (route: string) => () => {
-  //   console.log(worklog);
-  //   push(`${route}?id=${worklog.id}`);
-  // };
-  // const submit = async (id, childEntity, attributes): Promise<boolean> => {
-  //   // setLoading(true);
-  //   const result = await addChildEntity(id, childEntity, attributes);
-  //   // setLoading(false);
-  //   if (result.succeeded) {
-  //     return true;
-  //   }
-  // };
-
   return (
     <article>
       <div>

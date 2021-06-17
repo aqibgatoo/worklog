@@ -5,14 +5,14 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { Certification } from ".";
 import CollapsibleWithoutTitle from "./CollapsibleWithoutTitle";
+import Collapsible from "./Collapsible";
 import CertificationForm from "./CertificationForm";
+import { generateSlug } from "../utils/helpers";
 
 const CertificationSection = ({ worklog }) => {
   if (!worklog) return null;
-  const {
-    push,
-    query: { slug },
-  } = useRouter();
+  const { push, query } = useRouter();
+  const slug = generateSlug(query.index as []);
   const id = worklog.id;
   const [showForm, setShowForm] = useState(false);
 
@@ -38,12 +38,13 @@ const CertificationSection = ({ worklog }) => {
               field_link,
             }) => (
               <div key={id} mt="2">
-                <Certification
-                  title={field_certification_title}
-                  completionDate={field_completion_date}
-                  source={{ ...field_link }}
-                />
-                <hr />
+                <Collapsible title={field_certification_title}>
+                  <Certification
+                    title={field_certification_title}
+                    completionDate={field_completion_date}
+                    source={{ ...field_link }}
+                  />
+                </Collapsible>
               </div>
             )
           )
@@ -53,7 +54,7 @@ const CertificationSection = ({ worklog }) => {
       </div>
 
       {worklog.field_contributions.length > 0 && (
-        <Link href={`${slug}/recognitions`} passHref>
+        <Link href={`${slug}/certifications`} passHref>
           <a variant="button.link">
             View
             <Icon name="arrow" ml="1" />

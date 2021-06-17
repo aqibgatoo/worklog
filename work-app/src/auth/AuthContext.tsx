@@ -1,15 +1,9 @@
 import { createContext, useContext } from "react";
 
-// export type User = {
-//   name: string;
-//   email: string;
-// };
 export type User = {
   id?: string;
   username: string;
-  logoutToken?: string;
   email?: string;
-  csrfToken?: string;
 };
 
 export type CreateUser = {
@@ -20,6 +14,7 @@ export type CreateUser = {
 
 export type AuthContextType = {
   user?: User;
+  token?: string;
   signUp: (data: CreateUser) => void;
   login: (credentials: any) => void;
   logout: () => void;
@@ -27,6 +22,7 @@ export type AuthContextType = {
 
 export const AuthContext = createContext<AuthContextType>({
   user: null,
+  token: null,
   signUp: (data: CreateUser) => {},
   login: (credentials: any) => {},
   logout: () => {},

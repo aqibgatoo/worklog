@@ -1,22 +1,60 @@
-const createWorkLog = async (url: RequestInfo, payload: RequestInit) => {
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
-        "Content-Type": "application/vnd.api+json",
-      },
-      body: JSON.stringify(payload),
-    });
-    return await response.json();
-  } catch (e) {
-    console.log(e);
-    return {};
-  }
-};
-
 export type APIResult = {
   succeeded: boolean;
+};
+
+const getUserId = async (): Promise<string> => {
+  const userId = localStorage.getItem("userId");
+  if (!userId) {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_JSON_API_URL}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Basic ${localStorage.getItem("token")}`,
+      },
+    });
+    if (response.status === 200) {
+      const result = await response.json();
+      const id = result.meta.links.me.meta.id;
+      localStorage.setItem("userId", id);
+      return id;
+    }
+  }
+  return userId;
+};
+
+const createWorkLog = async (attributes: Object): Promise<APIResult> => {
+  try {
+    const userId = await getUserId();
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_JSON_API_URL}/node/work_log`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Basic ${localStorage.getItem("token")}`,
+          "Content-Type": "application/vnd.api+json",
+        },
+        body: JSON.stringify({
+          data: {
+            type: "work_log",
+            attributes: attributes,
+            relationships: {
+              field_user: {
+                data: {
+                  type: "user--user",
+                  id: userId,
+                },
+              },
+            },
+          },
+        }),
+      }
+    );
+    if (response.status === 201) {
+      return { succeeded: true };
+    }
+  } catch (e) {
+    console.log(e);
+    return { succeeded: false };
+  }
 };
 
 export type ChildEntity =
@@ -41,11 +79,9 @@ const addChildEntity = async (
 ): Promise<APIResult> => {
   const method = "POST";
   const headers = {
-    Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
+    Authorization: `Basic ${localStorage.getItem("token")}`, // "X-CSRF-Token": JSON.parse(localStorage.getItem("user")).logoutToken,
     "Content-Type": "application/vnd.api+json",
   };
-  // setLoading(true);
-  // console.log(certification);
   const childEntityPayload = {
     data: {
       type: `paragraph--${type}`,
@@ -62,6 +98,9 @@ const addChildEntity = async (
         body: JSON.stringify(childEntityPayload),
       }
     );
+    if (response.status !== 201) {
+      return { succeeded: false };
+    }
     const addedChildEntity = await response.json();
 
     const linkingPayload = {
@@ -77,21 +116,20 @@ const addChildEntity = async (
       ],
     };
     const res = await fetch(
-      `${process.env.NEXT_JSON_API_URL}/node/work_log/${parentEntityId}/relationships/field_${ChildEntityParentRelationship[type]}`,
+      `${process.env.NEXT_PUBLIC_JSON_API_URL}/node/work_log/${parentEntityId}/relationships/field_${ChildEntityParentRelationship[type]}`,
       {
         method,
         headers,
         body: JSON.stringify(linkingPayload),
       }
     );
-    // setLoading(false);
-    // push(`/worklog/${slug}`);
+    if (res.status === 204) {
+      return { succeeded: true };
+    }
   } catch (error) {
-    // setLoading(false);
     console.log(error);
-    return { succeeded: true };
+    return { succeeded: false };
   }
-  return { succeeded: true };
 };
 
 export { createWorkLog, addChildEntity };

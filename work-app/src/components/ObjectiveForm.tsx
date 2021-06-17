@@ -29,7 +29,7 @@ export type ObjectiveProps = {
   id: string;
 };
 export const ObjectiveForm = ({ slug, id }: ObjectiveProps) => {
-  const { push } = useRouter();
+  const { replace } = useRouter();
 
   const {
     handleSubmit,
@@ -85,7 +85,7 @@ export const ObjectiveForm = ({ slug, id }: ObjectiveProps) => {
     });
     setLoading(false);
     if (result.succeeded) {
-      push(`/worklog/${slug}`);
+      replace(`/${slug}`);
     }
   };
   return (

@@ -7,23 +7,16 @@ import RecognitionForm from "./RecognitonForm";
 import { Contribution } from ".";
 import CollapsibleWithoutTitle from "./CollapsibleWithoutTitle";
 import ContributionForm from "./ContributionForm";
+import Collapsible from "./Collapsible";
+import { generateSlug } from "../utils/helpers";
+
 const ContributionSection = ({ worklog }) => {
   if (!worklog) return null;
-  const {
-    push,
-    query: { slug },
-  } = useRouter();
+  const { push, query } = useRouter();
+  const slug = generateSlug(query.index as []);
+
   const id = worklog.id;
   const [showForm, setShowForm] = useState(false);
-
-  // const handleAdd = (route: string) => () => {
-  //   console.log(worklog);
-  //   push(`${route}?id=${worklog.id}`);
-  // };
-
-  // const handleAddition = (value: boolean) => {
-  //   setAdded(value);
-  // };
 
   return (
     <div>
@@ -50,15 +43,16 @@ const ContributionSection = ({ worklog }) => {
               field_contribution_source,
             }) => (
               <div key={id} mt="2">
-                <Contribution
-                  type={field_contribution_type}
-                  technology={field_technology}
-                  createdAt={created}
-                  important={field_contribution_important}
-                  title={field_title}
-                  sources={[{ ...field_contribution_source }]}
-                />
-                <hr />
+                <Collapsible title={field_title}>
+                  <Contribution
+                    type={field_contribution_type}
+                    technology={field_technology}
+                    createdAt={created}
+                    important={field_contribution_important}
+                    title={field_title}
+                    sources={[{ ...field_contribution_source }]}
+                  />
+                </Collapsible>
               </div>
             )
           )
@@ -68,7 +62,7 @@ const ContributionSection = ({ worklog }) => {
       </div>
 
       {worklog.field_contributions.length > 0 && (
-        <Link href={`${slug}/recognitions`} passHref>
+        <Link href={`${slug}/contributions`} passHref>
           <a variant="button.link">
             View
             <Icon name="arrow" ml="1" />

@@ -7,22 +7,21 @@ type BasicAuthProviderProps = {
 };
 const mapper = (data: any): User => ({
   username: data.current_user.name,
-  id: data.current_user.id,
-  csrfToken: data.csrf_token,
-  logoutToken: data.logout_token,
+  id: data.current_user.uid,
 });
 const BasicAuthProvider = ({ children }: BasicAuthProviderProps) => {
   const { push } = useRouter();
   const [user, setUser] = useState<User>(
     JSON.parse(localStorage.getItem("user"))
   );
+  const [token, setToken] = useState<string>(localStorage.getItem("token"));
   useEffect(() => {
-    if (user) {
+    if (token) {
       push("/");
     } else {
       push("/login");
     }
-  }, [user]);
+  }, [token]);
 
   const login = async (credentials) => {
     const result = await fetch(
@@ -37,8 +36,12 @@ const BasicAuthProvider = ({ children }: BasicAuthProviderProps) => {
       }
     );
     if (result.status === 200) {
-      const user = await result.json();
-      const normlaizedUser = mapper(user);
+      const base64EncodedToken = btoa(
+        `${credentials.name}:${credentials.pass}`
+      );
+      localStorage.setItem("token", base64EncodedToken);
+      setToken(base64EncodedToken);
+      const normlaizedUser = mapper(await result.json());
       localStorage.setItem("user", JSON.stringify(normlaizedUser));
       setUser(normlaizedUser);
     } else {
@@ -48,28 +51,10 @@ const BasicAuthProvider = ({ children }: BasicAuthProviderProps) => {
   };
 
   const logout = async () => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const logoutToken = user.logout_token;
-    const csrfToken = user.csrf_token;
-    const result = await fetch(
-      `${process.env.NEXT_PUBLIC_DRUPAL_BASE_URL}/user/logout?_format=json&token=${logoutToken}`,
-      {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRF-Token": csrfToken,
-        },
-      }
-    );
-    if (result.status === 200) {
-      localStorage.removeItem("user");
-      setUser(null);
-    } else {
-      console.log(result.body);
-      //TODO: throw error instead of logging out the error message
-      // throw new Error();
-    }
+    setToken(null);
+    setUser(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   };
   const signUp = async (user: CreateUser) => {
     const payload = {
@@ -96,6 +81,7 @@ const BasicAuthProvider = ({ children }: BasicAuthProviderProps) => {
     }
   };
   const value = {
+    token,
     user,
     login,
     signUp,

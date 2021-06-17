@@ -39,20 +39,7 @@ export default function Index({ worklog }) {
   );
 }
 
-export async function getStaticPaths() {
-  let paths = await getPathsForEntityType("node", "work_log");
-  paths = paths.map((e) => ({
-    params: {
-      slug: e.params.slug[1],
-    },
-  }));
-  return {
-    paths: paths,
-    fallback: true,
-  };
-}
-
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
   context.params = { slug: [context.params.slug] };
   const worklog = await getEntityFromContext("node", "work_log", context, {
     prefix: `/worklog`,

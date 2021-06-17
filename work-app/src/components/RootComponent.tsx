@@ -22,16 +22,6 @@ const RootComponent = ({ data }) => {
   const {
     query: { type },
   } = useRouter();
-  //   <div
-  //   display="flex"
-  //   justifyContent="space-between"
-  //   alignItems="flex-start"
-  // >
-  //   <h1 variant="heading.h2" mb="10">
-  //     Worklogs
-  //   </h1>
-  //   <Button onClick={handleAddWorklog} label="Add New" />
-  // </div>
 
   return (
     <div>

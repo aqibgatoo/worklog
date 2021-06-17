@@ -17,7 +17,7 @@ export type CertificationProps = {
 };
 
 export const ContributionForm = ({ slug, id }: CertificationProps) => {
-  const { push } = useRouter();
+  const { replace } = useRouter();
   const {
     handleSubmit,
     control,
@@ -43,7 +43,7 @@ export const ContributionForm = ({ slug, id }: CertificationProps) => {
     });
     setLoading(false);
     if (result.succeeded) {
-      push(`/worklog/${slug}`);
+      replace(`/${slug}`);
     }
   };
   return (

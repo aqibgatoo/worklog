@@ -6,23 +6,13 @@ import Collapsible from "./Collapsible";
 import { useState } from "react";
 import RecognitionForm from "./RecognitonForm";
 import CollapsibleWithoutTitle from "./CollapsibleWithoutTitle";
+import { generateSlug } from "../utils/helpers";
 const RecognitionSection = ({ worklog }) => {
   if (!worklog) return null;
-  const {
-    push,
-    query: { slug },
-  } = useRouter();
+  const { push, query } = useRouter();
+  const slug = generateSlug(query.index as []);
   const id = worklog.id;
   const [showForm, setShowForm] = useState(false);
-
-  // const handleAdd = (route: string) => () => {
-  //   console.log(worklog);
-  //   push(`${route}?id=${worklog.id}`);
-  // };
-
-  // const handleAddition = (value: boolean) => {
-  //   setAdded(value);
-  // };
 
   return (
     <div>

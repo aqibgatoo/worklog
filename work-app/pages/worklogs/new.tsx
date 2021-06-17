@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
+import { createWorkLog } from "../../src/api";
+import { useAuth } from "../../src/auth/AuthContext";
 import { Input, Button } from "../../src/components";
 import { Layout } from "../../src/layout";
 
@@ -14,6 +16,7 @@ export type Worklog = {
 export const AddWorkLog = ({}) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
 
   const {
     handleSubmit,
@@ -28,43 +31,17 @@ export const AddWorkLog = ({}) => {
   });
   const submit = async (worklog: Worklog) => {
     setLoading(true);
-    console.log(worklog);
-    const payload = {
-      data: {
-        type: "work_log",
-        attributes: {
-          title: worklog.title,
-          field_title: worklog.title,
-          field_end_date: worklog.endDate,
-          field_start_date: worklog.startDate,
-        },
-        relationships: {
-          field_user: {
-            data: {
-              type: "user--user",
-              id: "6c5883f1-47ca-4e16-bfb5-9d6d35453240",
-            },
-          },
-        },
-      },
-    };
-    try {
-      const response = await fetch(process.env.NEXT_JSON_API_URL, {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_ACCESS_TOKEN}`,
-          "Content-Type": "application/vnd.api+json",
-        },
-        body: JSON.stringify(payload),
-      });
-      setLoading(false);
-      if (response.status === 201) {
-        router.push("/");
-      }
-    } catch (error) {
-      setLoading(false);
-      console.log(error);
+    const result = await createWorkLog({
+      title: worklog.title,
+      field_title: worklog.title,
+      field_end_date: worklog.endDate,
+      field_start_date: worklog.startDate,
+    });
+    setLoading(false);
+    if (result.succeeded) {
+      router.push("/");
+    } else {
+      console.log("failed to add worklog");
     }
   };
   return (

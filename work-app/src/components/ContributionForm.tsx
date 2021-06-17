@@ -56,7 +56,7 @@ export type ContributionProps = {
   id: string;
 };
 export const ContributionForm = ({ slug, id }: ContributionProps) => {
-  const { push } = useRouter();
+  const { replace } = useRouter();
 
   const {
     handleSubmit,
@@ -86,7 +86,7 @@ export const ContributionForm = ({ slug, id }: ContributionProps) => {
     });
     setLoading(false);
     if (result.succeeded) {
-      push(`/worklog/${slug}`);
+      replace(`/${slug}`);
     }
   };
   return (

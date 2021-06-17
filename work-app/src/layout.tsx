@@ -1,16 +1,23 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 import { useAuth } from "./auth/AuthContext";
-import { Button } from "./components";
 
-const links = [
-  {
-    title: "Home",
-    href: "/",
-  },
-];
+// const links = [
+//   {
+//     title: "New Worklog",
+//     href: "/worklogs/new",
+//   },
+// ];
 
 export function Layout({ children }) {
-  const { user, login, logout } = useAuth();
+  const { user, token, logout } = useAuth();
+  const { push } = useRouter();
+  useEffect(() => {
+    if (!token) {
+      push("/login");
+    }
+  }, [token]);
   return (
     <div maxW="640px" mx="auto">
       <header>
@@ -32,23 +39,23 @@ export function Layout({ children }) {
             </a>
           </Link>
           <nav>
-            <ul display="grid" col={3} gap="4">
-              {links.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} passHref>
-                    <a textDecoration="none" color="text" fontSize="sm">
-                      {link.title}
-                    </a>
-                  </Link>
-                </li>
-              ))}
-              {user ? (
+            <ul display="flex" justifyContent="space-between">
+              {token && user ? (
                 <>
-                  <li>Hi, {user.username}</li>
-                  <li onClick={logout}>Logout</li>
+                  <li mx="4">
+                    <Link href="/worklogs/new" passHref>
+                      <a textDecoration="none" color="text" fontSize="sm">
+                        New Worklog
+                      </a>
+                    </Link>
+                  </li>
+                  <li mx="4">Hi, {user.username}</li>
+                  <li onClick={logout} mx="4">
+                    Logout
+                  </li>
                 </>
               ) : (
-                <li>
+                <li mx="4">
                   <Link href="/login" passHref>
                     <a textDecoration="none" color="text" fontSize="sm">
                       Login/SignUp

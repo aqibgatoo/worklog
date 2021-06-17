@@ -17,7 +17,7 @@ export type ProjectProps = {
   id: string;
 };
 export const ProjectForm = ({ slug, id }: ProjectProps) => {
-  const { push } = useRouter();
+  const { replace } = useRouter();
 
   const {
     handleSubmit,
@@ -43,7 +43,7 @@ export const ProjectForm = ({ slug, id }: ProjectProps) => {
     });
     setLoading(false);
     if (result.succeeded) {
-      push(`/worklog/${slug}`);
+      replace(`/${slug}`);
     }
   };
   return (

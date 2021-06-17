@@ -4,24 +4,16 @@ import { Icon } from "reflexjs";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import ProjectForm from "./ProjectForm";
+import Collapsible from "./Collapsible";
 import CollapsibleWithoutTitle from "./CollapsibleWithoutTitle";
+import { generateSlug } from "../utils/helpers";
 const ProjectSection = ({ worklog }) => {
   if (!worklog) return null;
-  const {
-    push,
-    query: { slug },
-  } = useRouter();
+  const { push, query } = useRouter();
+  const slug = generateSlug(query.index as []);
+
   const id = worklog.id;
   const [showForm, setShowForm] = useState(false);
-
-  // const handleAdd = (route: string) => () => {
-  //   console.log(worklog);
-  //   push(`${route}?id=${worklog.id}`);
-  // };
-
-  // const handleAddition = (value: boolean) => {
-  //   setAdded(value);
-  // };
 
   return (
     <div>
@@ -46,13 +38,14 @@ const ProjectSection = ({ worklog }) => {
               field_project_description,
             }) => (
               <div key={id} mt="2">
-                <Project
-                  title={field_project_title}
-                  startDate={field_start_date}
-                  endDate={field_end_date}
-                  description={field_project_description.processed}
-                />
-                <hr />
+                <Collapsible title={field_project_title}>
+                  <Project
+                    title={field_project_title}
+                    startDate={field_start_date}
+                    endDate={field_end_date}
+                    description={field_project_description.processed}
+                  />
+                </Collapsible>
               </div>
             )
           )
@@ -62,7 +55,7 @@ const ProjectSection = ({ worklog }) => {
       </div>
 
       {worklog.field_projects.length > 0 && (
-        <Link href={`${slug}/recognitions`} passHref>
+        <Link href={`${slug}/projects`} passHref>
           <a variant="button.link">
             View
             <Icon name="arrow" ml="1" />

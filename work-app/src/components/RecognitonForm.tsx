@@ -58,7 +58,7 @@ export const RecognitionForm = ({ slug, id }: RecognitionProps) => {
     });
     setLoading(false);
     if (result.succeeded) {
-      replace(`/worklog/${slug}`);
+      replace(`/${slug}`);
     }
   };
   return (
