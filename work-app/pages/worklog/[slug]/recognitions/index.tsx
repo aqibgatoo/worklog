@@ -1,4 +1,4 @@
-import { getPathsForEntityType, getEntityFromContext } from "next-drupal";
+import { getResourceFromContext } from "next-drupal";
 
 import { Layout } from "../../../../src/layout";
 import { Recognition } from "../../../../src/components";
@@ -41,7 +41,7 @@ export default function ArticlePage({ worklog }) {
 
 export async function getServerSideProps(context) {
   context.params = { slug: [context.params.slug] };
-  const worklog = await getEntityFromContext("node", "work_log", context, {
+  const worklog = await getResourceFromContext("node--work_log", context, {
     prefix: "/worklog",
     params: {
       include:

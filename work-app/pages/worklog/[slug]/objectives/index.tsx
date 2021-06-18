@@ -1,4 +1,4 @@
-import { getPathsForEntityType, getEntityFromContext } from "next-drupal";
+import { getResourceFromContext } from "next-drupal";
 
 import { Layout } from "../../../../src/layout";
 import { Objective } from "../../../../src/components";
@@ -43,7 +43,7 @@ export default function Index({ worklog }) {
 export async function getServerSideProps(context) {
   context.params = { slug: [context.params.slug] };
 
-  const worklog = await getEntityFromContext("node", "work_log", context, {
+  const worklog = await getResourceFromContext("node--work_log", context, {
     prefix: "/worklog",
     params: {
       include:

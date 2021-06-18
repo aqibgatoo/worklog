@@ -1,4 +1,4 @@
-import { getEntitiesFromContext } from "next-drupal";
+import { getResourceCollectionFromContext } from "next-drupal";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -7,7 +7,7 @@ import { RootComponent } from "../src/components";
 import { Layout } from "../src/layout";
 const Index = ({ data }) => {
   const { push } = useRouter();
-  const {  user } = useAuth();
+  const { user } = useAuth();
 
   return (
     <Layout>
@@ -20,18 +20,20 @@ const Index = ({ data }) => {
 
 export async function getServerSideProps(context) {
   const id = context.query?.id;
-  const data = await getEntitiesFromContext("node", "work_log", context, {
+  let data = await getResourceCollectionFromContext("node--work_log", context, {
     params: {
       include:
         "field_certifications,field_contributions,field_objectives,field_projects,field_recognitions,field_highlights,field_user,uid",
       sort: "-created",
     },
-    filter: (entity) => (id ? entity.id === id : true),
   });
+  if (id) {
+    data = data.filter((entity) => entity.id === id);
+  }
+
   return {
     props: {
       data,
-      revalidate: 1,
     },
   };
 }
